@@ -1,7 +1,8 @@
-package com.andrea.weather.config;
+package com.andrea.weather.util;
 
 import org.springframework.stereotype.Component;
 
+import com.andrea.weather.config.WeatherUnitConfig;
 import com.andrea.weather.dto.OpenMeteoResponse;
 
 @Component

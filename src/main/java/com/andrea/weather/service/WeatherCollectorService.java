@@ -12,7 +12,7 @@ import com.andrea.weather.entities.City;
 import com.andrea.weather.entities.WeatherMeasurement;
 import com.andrea.weather.repository.CityRepository;
 import com.andrea.weather.repository.WeatherRepository;
-import com.andrea.weather.config.WeatherUnitValidator;
+import com.andrea.weather.util.WeatherUnitValidator;
 
 
 @Service
