@@ -1,33 +1,46 @@
 package com.andrea.weather.service;
 
+import com.andrea.weather.config.WeatherUnitConfig;
+import com.andrea.weather.dto.WeatherAverageProjection;
 import com.andrea.weather.dto.WeatherAverageResponse;
+import com.andrea.weather.dto.WeatherUnits;
 import com.andrea.weather.repository.WeatherRepository;
-
-import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
 @Service
 public class StatisticsService {
 
-    private final WeatherRepository weatherRepository;
+	private final WeatherRepository weatherRepository;
+	private final WeatherUnitConfig unitConfig;
 
-    public StatisticsService(WeatherRepository weatherRepository) {
-        this.weatherRepository = weatherRepository;
-    }
+	public StatisticsService(WeatherRepository weatherRepository, WeatherUnitConfig unitConfig) {
+		this.weatherRepository = weatherRepository;
+		this.unitConfig = unitConfig;
+	}
 
-    public WeatherAverageResponse getAverage(String cityName) {
+	public WeatherAverageResponse getAverage(String cityName) {
 
 		if (!weatherRepository.existsByCityName(cityName)) {
 			throw new RuntimeException("No weather data found for city: " + cityName);
 		}
 
-		Map<String, Object> result = weatherRepository.findAverageByCityName(cityName);
+		WeatherAverageProjection result = weatherRepository.findAverageByCityName(cityName);
+		Integer prevalentWeatherCode = weatherRepository.findPrevalentWeatherCode(cityName);
 
-		return new WeatherAverageResponse(
-				cityName, 
-				(Double) result.get("temperature"),
-				(Double) result.get("windSpeed"), 
-				(Double) result.get("windDirection"));
+	    WeatherUnits units = new WeatherUnits(
+	            unitConfig.temperature(),
+	            unitConfig.windSpeed(),
+	            unitConfig.windDirection()
+	    );
+
+	    return new WeatherAverageResponse(
+	            cityName,
+	            result.temperature(),
+	            result.windSpeed(),
+	            result.windDirection(),
+	            prevalentWeatherCode,
+	            units
+	    );
 	}
 }

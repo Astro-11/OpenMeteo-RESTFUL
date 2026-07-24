@@ -11,16 +11,16 @@ public class WeatherMeasurement {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "city_id")
+    @JoinColumn(name = "city_id", nullable = false)
     private City city;
 
-	private double temperature;
-	private double windSpeed;
-	private double windDirection;
-	private int weatherCode;
-	private LocalDateTime timestamp;
+    private double temperature;
+    private double windSpeed;
+    private double windDirection;
+    private int weatherCode;
+    private LocalDateTime timestamp;
 
-    public WeatherMeasurement() {
+    protected WeatherMeasurement() {
     }
 
     public WeatherMeasurement(
@@ -53,6 +53,14 @@ public class WeatherMeasurement {
 
     public double getWindSpeed() {
         return windSpeed;
+    }
+
+    public double getWindDirection() {
+        return windDirection;
+    }
+
+    public int getWeatherCode() {
+        return weatherCode;
     }
 
     public LocalDateTime getTimestamp() {

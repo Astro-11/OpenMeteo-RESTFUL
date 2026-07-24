@@ -12,11 +12,10 @@ public class DataInitializer implements CommandLineRunner {
     private final CityRepository cityRepository;
     private final WeatherCollectorService weatherCollectorService;
 
-    public DataInitializer(CityRepository cityRepository,
-                           WeatherCollectorService weatherCollectorService) {
-        this.cityRepository = cityRepository;
-        this.weatherCollectorService = weatherCollectorService;
-    }
+	public DataInitializer(CityRepository cityRepository, WeatherCollectorService weatherCollectorService) {
+		this.cityRepository = cityRepository;
+		this.weatherCollectorService = weatherCollectorService;
+	}
 
     @Override
     public void run(String... args) {

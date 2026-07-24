@@ -1,24 +1,34 @@
 package com.andrea.weather.repository;
 
+import com.andrea.weather.dto.WeatherAverageProjection;
 import com.andrea.weather.entities.WeatherMeasurement;
-
-import java.util.Map;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface WeatherRepository extends JpaRepository<WeatherMeasurement, Long> {
+
 	@Query("""
-		       SELECT new map(
-		           AVG(w.temperature) as temperature,
-		           AVG(w.windSpeed) as windSpeed,
-		           AVG(w.windDirection) as windDirection
-		       )
-		       FROM WeatherMeasurement w
-		       WHERE w.city.name = :cityName
-		       """)
-		Map<String, Object> findAverageByCityName(@Param("cityName") String cityName);
-	
-	boolean existsByCityName(String cityName);
+	       SELECT new com.andrea.weather.dto.WeatherAverageProjection(
+	           AVG(w.temperature),
+	           AVG(w.windSpeed),
+	           AVG(w.windDirection))
+	       FROM WeatherMeasurement w
+	       WHERE w.city.name = :cityName
+	       """)
+	WeatherAverageProjection findAverageByCityName(@Param("cityName") String cityName);
+
+    @Query("""
+           SELECT w.weatherCode
+           FROM WeatherMeasurement w
+           WHERE w.city.name = :cityName
+           GROUP BY w.weatherCode
+           ORDER BY COUNT(w.weatherCode) DESC
+           LIMIT 1
+           """)
+    Integer findPrevalentWeatherCode(@Param("cityName") String cityName);
+
+
+    boolean existsByCityName(String cityName);
 }

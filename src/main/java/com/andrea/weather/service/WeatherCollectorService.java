@@ -7,10 +7,13 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.andrea.weather.dto.OpenMeteoResponse;
+import com.andrea.weather.dto.OpenMeteoResponse.CurrentWeather;
 import com.andrea.weather.entities.City;
 import com.andrea.weather.entities.WeatherMeasurement;
 import com.andrea.weather.repository.CityRepository;
 import com.andrea.weather.repository.WeatherRepository;
+import com.andrea.weather.config.WeatherUnitValidator;
+
 
 @Service
 public class WeatherCollectorService {
@@ -18,17 +21,21 @@ public class WeatherCollectorService {
     private final CityRepository cityRepository;
     private final WeatherRepository weatherRepository;
     private final OpenMeteoService openMeteoService;
+    private final WeatherUnitValidator validator;
 
     public WeatherCollectorService(
             CityRepository cityRepository,
             WeatherRepository weatherRepository,
-            OpenMeteoService openMeteoService) {
+            OpenMeteoService openMeteoService,
+            WeatherUnitValidator validator) {
 
         this.cityRepository = cityRepository;
         this.weatherRepository = weatherRepository;
         this.openMeteoService = openMeteoService;
+        this.validator = validator;
     }
-    
+
+
     @Scheduled(fixedRate = 600000)
     public void collectWeatherData() {
 
@@ -36,18 +43,25 @@ public class WeatherCollectorService {
 
         for (City city : cities) {
 
-			OpenMeteoResponse response = openMeteoService.getCurrentWeather(city);
+            OpenMeteoResponse response = openMeteoService.getCurrentWeather(city);
 
-            WeatherMeasurement measurement = new WeatherMeasurement(
+			if (!validator.validateUnits(response.getCurrentWeatherUnits())) {
+				System.err.println("Measurement discarded: invalid weather units for city " + city.getName());
+				continue;
+			}
+
+            CurrentWeather current = response.getCurrentWeather();
+
+            WeatherMeasurement measurement =
+                    new WeatherMeasurement(
                             city,
-                            response.getCurrentWeather().getTemperature(),
-                            response.getCurrentWeather().getWindspeed(),
-                            response.getCurrentWeather().getWinddirection(),
-                            response.getCurrentWeather().getWeathercode(),
-                            LocalDateTime.now());
+                            current.getTemperature(),
+                            current.getWindSpeed(),
+                            current.getWindDirection(),
+                            current.getWeatherCode(),
+                            LocalDateTime.parse(current.getTime()));
 
             weatherRepository.save(measurement);
         }
     }
-
 }

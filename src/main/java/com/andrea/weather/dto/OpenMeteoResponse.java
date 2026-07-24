@@ -3,55 +3,129 @@ package com.andrea.weather.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class OpenMeteoResponse {
-	
-    @JsonProperty("current_weather")
-    private CurrentWeather currentWeather;
 
-    public CurrentWeather getCurrentWeather() {
-        return currentWeather;
-    }
+	@JsonProperty("current_weather")
+	private CurrentWeather currentWeather;
+	@JsonProperty("current_weather_units")
+	private CurrentWeatherUnits currentWeatherUnits;
 
-    public void setCurrentWeather(CurrentWeather currentWeather) {
-        this.currentWeather = currentWeather;
-    }
+	public CurrentWeather getCurrentWeather() {
+		return currentWeather;
+	}
 
+	public void setCurrentWeather(CurrentWeather currentWeather) {
+		this.currentWeather = currentWeather;
+	}
 
-    public static class CurrentWeather {
+	public CurrentWeatherUnits getCurrentWeatherUnits() {
+		return currentWeatherUnits;
+	}
 
-        @JsonProperty("temperature")
-        private double temperature;
-        @JsonProperty("windspeed")
-        private double windSpeed;
-        @JsonProperty("winddirection")
-        private double windDirection;
+	public void setCurrentWeatherUnits(CurrentWeatherUnits currentWeatherUnits) {
+		this.currentWeatherUnits = currentWeatherUnits;
+	}
 
-        public double getTemperature() {
-            return temperature;
-        }
+	public static class CurrentWeather {
 
-        public void setTemperature(double temperature) {
-            this.temperature = temperature;
-        }
+		private String time;
+		private double temperature;
+		@JsonProperty("windspeed")
+		private double windSpeed;
+		@JsonProperty("winddirection")
+		private double windDirection;
+		@JsonProperty("weathercode")
+		private int weatherCode;
 
-        public double getWindspeed() {
-            return windSpeed;
-        }
-
-        public void setWindspeed(double windspeed) {
-            this.windSpeed = windspeed;
-        }
-
-        public double getWinddirection() {
-            return windDirection;
-        }
-
-        public void setWinddirection(double winddirection) {
-            this.windDirection = winddirection;
-        }
-
-		public int getWeathercode() {
-			// TODO Auto-generated method stub
-			return 0;
+		public String getTime() {
+			return time;
 		}
-    }
+
+		public void setTime(String time) {
+			this.time = time;
+		}
+
+		public double getTemperature() {
+			return temperature;
+		}
+
+		public void setTemperature(double temperature) {
+			this.temperature = temperature;
+		}
+
+		public double getWindSpeed() {
+			return windSpeed;
+		}
+
+		public void setWindSpeed(double windSpeed) {
+			this.windSpeed = windSpeed;
+		}
+
+		public double getWindDirection() {
+			return windDirection;
+		}
+
+		public void setWindDirection(double windDirection) {
+			this.windDirection = windDirection;
+		}
+
+		public int getWeatherCode() {
+			return weatherCode;
+		}
+
+		public void setWeatherCode(int weatherCode) {
+			this.weatherCode = weatherCode;
+		}
+	}
+
+	public static class CurrentWeatherUnits {
+
+		private String time;
+		private String temperature;
+		@JsonProperty("windspeed")
+		private String windSpeed;
+		@JsonProperty("winddirection")
+		private String windDirection;
+		@JsonProperty("weathercode")
+		private String weatherCode;
+
+		public String getTime() {
+			return time;
+		}
+
+		public void setTime(String time) {
+			this.time = time;
+		}
+
+		public String getTemperature() {
+			return temperature;
+		}
+
+		public void setTemperature(String temperature) {
+			this.temperature = temperature;
+		}
+
+		public String getWindSpeed() {
+			return windSpeed;
+		}
+
+		public void setWindSpeed(String windSpeed) {
+			this.windSpeed = windSpeed;
+		}
+
+		public String getWindDirection() {
+			return windDirection;
+		}
+
+		public void setWindDirection(String windDirection) {
+			this.windDirection = windDirection;
+		}
+
+		public String getWeatherCode() {
+			return weatherCode;
+		}
+
+		public void setWeatherCode(String weatherCode) {
+			this.weatherCode = weatherCode;
+		}
+	}
 }
