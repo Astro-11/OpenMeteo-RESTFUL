@@ -31,8 +31,8 @@ public class StatisticsService {
 	    WeatherUnits units = new WeatherUnits(
 	            unitConfig.temperature(),
 	            unitConfig.windSpeed(),
-	            unitConfig.windDirection()
-	    );
+	            unitConfig.windDirection(),
+	            unitConfig.weatherCode());
 
 	    return new WeatherAverageResponse(
 	            cityName,
@@ -40,7 +40,6 @@ public class StatisticsService {
 	            result.windSpeed(),
 	            result.windDirection(),
 	            prevalentWeatherCode,
-	            units
-	    );
+	            units);
 	}
 }

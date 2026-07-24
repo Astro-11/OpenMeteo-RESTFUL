@@ -3,15 +3,11 @@ package com.andrea.weather.dto;
 public class WeatherAverageResponse {
 
     private String city;
-
     private double averageTemperature;
     private double averageWindSpeed;
     private double averageWindDirection;
-
     private Integer prevalentWeatherCode;
-
     private WeatherUnits units;
-
 
     public WeatherAverageResponse(
             String city,

@@ -29,6 +29,5 @@ public interface WeatherRepository extends JpaRepository<WeatherMeasurement, Lon
            """)
     Integer findPrevalentWeatherCode(@Param("cityName") String cityName);
 
-
     boolean existsByCityName(String cityName);
 }
