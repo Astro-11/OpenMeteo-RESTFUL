@@ -4,6 +4,7 @@ import com.andrea.weather.config.WeatherUnitConfig;
 import com.andrea.weather.dto.WeatherAverageProjection;
 import com.andrea.weather.dto.WeatherAverageResponse;
 import com.andrea.weather.dto.WeatherUnits;
+import com.andrea.weather.exception.CityNotFoundException;
 import com.andrea.weather.repository.WeatherRepository;
 
 import org.springframework.stereotype.Service;
@@ -22,9 +23,9 @@ public class StatisticsService {
 	public WeatherAverageResponse getAverage(String cityName) {
 
 		if (!weatherRepository.existsByCityName(cityName)) {
-			throw new RuntimeException("No weather data found for city: " + cityName);
+			throw new CityNotFoundException(cityName);
 		}
-
+		
 		WeatherAverageProjection result = weatherRepository.findAverageByCityName(cityName);
 		Integer prevalentWeatherCode = weatherRepository.findPrevalentWeatherCode(cityName);
 
