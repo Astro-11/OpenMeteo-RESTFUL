@@ -3,6 +3,7 @@ package com.andrea.weather.service;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +34,7 @@ public class WeatherCollectorService {
 		this.validator = validator;
 	}
 
-	@Scheduled(initialDelay = 600000, fixedRate = 600000)
+	@Scheduled(fixedRate = 900000)
 	public void collectWeatherData() {
 
 		List<City> cities = cityRepository.findAll();
@@ -62,7 +63,11 @@ public class WeatherCollectorService {
 						current.getWeatherCode(),
 						LocalDateTime.parse(current.getTime()));
 
-				weatherRepository.save(measurement);
+				try {
+					weatherRepository.save(measurement);
+				} catch (DataIntegrityViolationException e) {
+					System.out.println("Duplicate measurement ignored for city " + city.getName());
+				}
 
 			} catch (Exception e) {
 				System.err.println("Error collecting weather data for city " + city.getName() + ": " + e.getMessage());

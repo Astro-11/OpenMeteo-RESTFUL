@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "city_id", "timestamp" }) })
 public class WeatherMeasurement {
 
 	@Id
