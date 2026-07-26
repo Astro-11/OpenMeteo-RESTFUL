@@ -14,6 +14,21 @@ GET /weather/averages - Restituisce le medie delle misurazioni raccolte per tutt
 
 GET /weather/averages/{city} - Restituisce le medie delle misurazioni raccolte per una specifica città.
 
+## Build ed esecuzione con Docker
+
+```bash
+docker build -t weather-api .
+```
+```bash
+docker run -p 8080:8080 weather-api
+```
+
+L'applicazione sarà disponibile all'indirizzo:
+
+```text
+http://localhost:8080/weather
+```
+
 ## Note:
 
 OpenMeteo restituisce sempre i dati in formato metrico. Per questo si è reputato superfluo salvare le unità di misura di ciascuna misurazione.
