@@ -33,7 +33,7 @@ public class WeatherCollectorService {
 		this.validator = validator;
 	}
 
-	@Scheduled(fixedRate = 600000)
+	@Scheduled(initialDelay = 600000, fixedRate = 600000)
 	public void collectWeatherData() {
 
 		List<City> cities = cityRepository.findAll();
