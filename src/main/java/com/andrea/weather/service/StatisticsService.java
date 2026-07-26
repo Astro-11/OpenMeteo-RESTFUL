@@ -28,18 +28,16 @@ public class StatisticsService {
 		WeatherAverageProjection result = weatherRepository.findAverageByCityName(cityName);
 		Integer prevalentWeatherCode = weatherRepository.findPrevalentWeatherCode(cityName);
 
-	    WeatherUnits units = new WeatherUnits(
-	            unitConfig.temperature(),
-	            unitConfig.windSpeed(),
-	            unitConfig.windDirection(),
-	            unitConfig.weatherCode());
+		WeatherUnits units = new WeatherUnits(
+				unitConfig.temperature(), 
+				unitConfig.windSpeed(),
+				unitConfig.windDirection(), 
+				unitConfig.weatherCode());
 
-	    return new WeatherAverageResponse(
-	            cityName,
-	            result.temperature(),
-	            result.windSpeed(),
-	            result.windDirection(),
-	            prevalentWeatherCode,
-	            units);
+		return new WeatherAverageResponse(cityName,
+				result.temperature(), 
+				result.windSpeed(), 
+				result.windDirection(),
+				prevalentWeatherCode, units);
 	}
 }

@@ -6,64 +6,63 @@ import java.time.LocalDateTime;
 @Entity
 public class WeatherMeasurement {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "city_id", nullable = false)
-    private City city;
+	@ManyToOne
+	@JoinColumn(name = "city_id", nullable = false)
+	private City city;
 
-    private double temperature;
-    private double windSpeed;
-    private double windDirection;
-    private int weatherCode;
-    private LocalDateTime timestamp;
+	private double temperature;
+	private double windSpeed;
+	private double windDirection;
+	private int weatherCode;
+	private LocalDateTime timestamp;
 
-    protected WeatherMeasurement() {
-    }
+	protected WeatherMeasurement() {
+	}
 
-    public WeatherMeasurement(
-            City city,
-            double temperature,
-            double windSpeed,
-            double windDirection,
-            int weatherCode,
-            LocalDateTime timestamp) {
+	public WeatherMeasurement(City city,
+			double temperature, 
+			double windSpeed, 
+			double windDirection, 
+			int weatherCode,
+			LocalDateTime timestamp) {
 
-        this.city = city;
-        this.temperature = temperature;
-        this.windSpeed = windSpeed;
-        this.windDirection = windDirection;
-        this.weatherCode = weatherCode;
-        this.timestamp = timestamp;
-    }
+		this.city = city;
+		this.temperature = temperature;
+		this.windSpeed = windSpeed;
+		this.windDirection = windDirection;
+		this.weatherCode = weatherCode;
+		this.timestamp = timestamp;
+	}
 
-    public Long getId() {
-        return id;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public City getCity() {
-        return city;
-    }
+	public City getCity() {
+		return city;
+	}
 
-    public double getTemperature() {
-        return temperature;
-    }
+	public double getTemperature() {
+		return temperature;
+	}
 
-    public double getWindSpeed() {
-        return windSpeed;
-    }
+	public double getWindSpeed() {
+		return windSpeed;
+	}
 
-    public double getWindDirection() {
-        return windDirection;
-    }
+	public double getWindDirection() {
+		return windDirection;
+	}
 
-    public int getWeatherCode() {
-        return weatherCode;
-    }
+	public int getWeatherCode() {
+		return weatherCode;
+	}
 
-    public LocalDateTime getTimestamp() {
-        return timestamp;
-    }
+	public LocalDateTime getTimestamp() {
+		return timestamp;
+	}
 }

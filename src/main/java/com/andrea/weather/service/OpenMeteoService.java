@@ -9,24 +9,22 @@ import org.springframework.web.client.RestClient;
 @Service
 public class OpenMeteoService {
 
-    private final RestClient restClient;
+	private final RestClient restClient;
 
-    public OpenMeteoService() {
-        this.restClient = RestClient.create();
-    }
+	public OpenMeteoService() {
+		this.restClient = RestClient.create();
+	}
 
-    public OpenMeteoResponse getCurrentWeather(City city) {
-        return restClient
-                .get()
-                .uri(buildUri(city))
-                .retrieve()
-                .body(OpenMeteoResponse.class);
-    }
-    
-    private String buildUri(City city) {
-        return "https://api.open-meteo.com/v1/forecast"
-                + "?latitude=" + city.getLatitude()
-                + "&longitude=" + city.getLongitude()
-                + "&current_weather=true";
-    }
+	public OpenMeteoResponse getCurrentWeather(City city) {
+		return restClient.get()
+				.uri(buildUri(city))
+				.retrieve()
+				.body(OpenMeteoResponse.class);
+	}
+
+	private String buildUri(City city) {
+		return "https://api.open-meteo.com/v1/forecast" 
+				+ "?latitude=" + city.getLatitude() + "&longitude="
+				+ city.getLongitude() + "&current_weather=true";
+	}
 }

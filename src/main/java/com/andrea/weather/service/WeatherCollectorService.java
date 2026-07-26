@@ -14,54 +14,59 @@ import com.andrea.weather.repository.CityRepository;
 import com.andrea.weather.repository.WeatherRepository;
 import com.andrea.weather.util.WeatherUnitValidator;
 
-
 @Service
 public class WeatherCollectorService {
 
-    private final CityRepository cityRepository;
-    private final WeatherRepository weatherRepository;
-    private final OpenMeteoService openMeteoService;
-    private final WeatherUnitValidator validator;
+	private final CityRepository cityRepository;
+	private final WeatherRepository weatherRepository;
+	private final OpenMeteoService openMeteoService;
+	private final WeatherUnitValidator validator;
 
-    public WeatherCollectorService(
-            CityRepository cityRepository,
-            WeatherRepository weatherRepository,
-            OpenMeteoService openMeteoService,
-            WeatherUnitValidator validator) {
+	public WeatherCollectorService(CityRepository cityRepository, 
+			WeatherRepository weatherRepository,
+			OpenMeteoService openMeteoService, 
+			WeatherUnitValidator validator) {
 
-        this.cityRepository = cityRepository;
-        this.weatherRepository = weatherRepository;
-        this.openMeteoService = openMeteoService;
-        this.validator = validator;
-    }
+		this.cityRepository = cityRepository;
+		this.weatherRepository = weatherRepository;
+		this.openMeteoService = openMeteoService;
+		this.validator = validator;
+	}
 
+	@Scheduled(fixedRate = 600000)
+	public void collectWeatherData() {
 
-    @Scheduled(fixedRate = 600000)
-    public void collectWeatherData() {
+		List<City> cities = cityRepository.findAll();
 
-        List<City> cities = cityRepository.findAll();
+		for (City city : cities) {
 
-        for (City city : cities) {
+			try {
+				OpenMeteoResponse response = openMeteoService.getCurrentWeather(city);
 
-            OpenMeteoResponse response = openMeteoService.getCurrentWeather(city);
+				if (response == null) {
+					System.err.println("Measurement discarded: no weather data for city " + city.getName());
+					continue;
+				}
+				if (!validator.validateUnits(response.getCurrentWeatherUnits())) {
+					System.err.println("Measurement discarded: invalid weather units for city " + city.getName());
+					continue;
+				}
 
-			if (!validator.validateUnits(response.getCurrentWeatherUnits())) {
-				System.err.println("Measurement discarded: invalid weather units for city " + city.getName());
-				continue;
+				CurrentWeather current = response.getCurrentWeather();
+
+				WeatherMeasurement measurement = new WeatherMeasurement(
+						city, 
+						current.getTemperature(),
+						current.getWindSpeed(),
+						current.getWindDirection(),
+						current.getWeatherCode(),
+						LocalDateTime.parse(current.getTime()));
+
+				weatherRepository.save(measurement);
+
+			} catch (Exception e) {
+				System.err.println("Error collecting weather data for city " + city.getName() + ": " + e.getMessage());
 			}
-
-            CurrentWeather current = response.getCurrentWeather();
-
-            WeatherMeasurement measurement =
-                    new WeatherMeasurement(
-                            city,
-                            current.getTemperature(),
-                            current.getWindSpeed(),
-                            current.getWindDirection(),
-                            current.getWeatherCode(),
-                            LocalDateTime.parse(current.getTime()));
-
-            weatherRepository.save(measurement);
-        }
-    }
+		}
+	}
 }
