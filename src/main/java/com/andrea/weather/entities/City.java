@@ -22,6 +22,12 @@ public class City {
 		this.latitude = latitude;
 		this.longitude = longitude;
 	}
+	
+	@PrePersist
+	@PreUpdate
+	private void normalizeName() {
+		name = name.toLowerCase().trim();
+	}
 
 	public Long getId() {
 		return id;

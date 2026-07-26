@@ -21,6 +21,7 @@ public class StatisticsService {
 	}
 
 	public WeatherAverageResponse getAverage(String cityName) {
+		cityName = cityName.toLowerCase().trim();
 
 		if (!weatherRepository.existsByCityName(cityName)) {
 			throw new CityNotFoundException(cityName);
