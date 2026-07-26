@@ -7,9 +7,7 @@ import com.andrea.weather.service.StatisticsService;
 
 import java.util.List;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/weather")
@@ -23,6 +21,18 @@ public class WeatherController {
 		this.statisticsService = statisticsService;
 		this.cityRepository = cityRepository;
 	}
+	
+	@GetMapping(produces = "text/plain")
+	public String info() {
+		return """
+				Weather API
+
+				Available endpoints:
+				GET /weather/cities
+				GET /weather/averages
+				GET /weather/averages/{city}
+				""";
+	}
 
 	@GetMapping("/averages")
 	public List<WeatherAverageResponse> getAllAverages() {
@@ -33,11 +43,7 @@ public class WeatherController {
 
 	@GetMapping("/averages/{city}")
 	public WeatherAverageResponse getAverage(@PathVariable String city) {
-		try {
-			return statisticsService.getAverage(city);
-		} catch (RuntimeException e) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-		}
+		return statisticsService.getAverage(city);
 	}
 
 	@GetMapping("/cities")
